@@ -68,7 +68,7 @@
   }
 
   var titulo = ag.slug === 'geral' ? 'Geral' : 'Banda ' + ag.nome;
-  var nomeAgenda = 'Louvor COMBC – ' + ag.nome;
+  var nomeAgenda = 'Escalas: Louvor (' + ag.nome + ')';
   var ics = 'https://calendar.google.com/calendar/ical/' + encodeURIComponent(ag.id) + '/public/basic.ics';
   var webcal = ics.replace(/^https:/, 'webcal:');
   var google = 'https://calendar.google.com/calendar/u/0?cid=' + ag.b64;
