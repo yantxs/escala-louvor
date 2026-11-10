@@ -18,6 +18,12 @@ window.AGENDAS = [
   "b64": "YzgyYzUyY2U2MWIzYzk2MTk1NDBlMmZkYzdhNzgzODFiNjExZDgyZWUzMmUwZDNmZTgxZmE3YzEzMzI1OTEwOEBncm91cC5jYWxlbmRhci5nb29nbGUuY29t"
  },
  {
+  "slug": "deivid",
+  "nome": "Deivid",
+  "id": "3d3dd9a286b661f02f98cc0dc8150daa5525b2e0d165d1dfd722ba6f5562faf9@group.calendar.google.com",
+  "b64": "M2QzZGQ5YTI4NmI2NjFmMDJmOThjYzBkYzgxNTBkYWE1NTI1YjJlMGQxNjVkMWRmZDcyMmJhNmY1NTYyZmFmOUBncm91cC5jYWxlbmRhci5nb29nbGUuY29t"
+ },
+ {
   "slug": "eliani",
   "nome": "Eliani",
   "id": "6299c941ee1f624021ba9ed2dbe6fa96a45d196bbac05be1d69efb1b3983fdfe@group.calendar.google.com",
