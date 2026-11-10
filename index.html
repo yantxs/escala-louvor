@@ -1,0 +1,110 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Escala de Louvor · COMBC</title>
+<meta name="description" content="Adicione a escala do Ministério de Louvor da COMBC à sua agenda.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@500;700&display=swap" rel="stylesheet">
+<style>
+  :root { --ink:#000; --muted:#555; --line:#d4d4d4; --bg:#fff; --soft:#f4f4f4; }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--bg); color: var(--ink); font-family: Montserrat, system-ui, sans-serif; font-weight: 500; -webkit-text-size-adjust: 100%; }
+  main { max-width: 440px; margin: 0 auto; padding: 28px 16px 48px; }
+  header { display: flex; align-items: flex-end; justify-content: space-between; gap: 12px; border-bottom: 2px solid var(--ink); padding-bottom: 14px; }
+  header img { height: 40px; width: auto; display: block; }
+  header p { margin: 0; text-align: right; font-size: 11px; letter-spacing: .14em; text-transform: uppercase; line-height: 1.4; }
+  h1 { font-size: 26px; letter-spacing: .02em; margin: 28px 0 4px; text-transform: uppercase; }
+  .sub { color: var(--muted); font-size: 14px; margin: 0 0 24px; line-height: 1.5; }
+  .btn { display: flex; align-items: center; justify-content: space-between; gap: 12px; width: 100%; min-height: 56px; padding: 14px 16px; margin: 0 0 10px; border: 1.5px solid var(--ink); border-radius: 10px; background: var(--bg); color: var(--ink); font: inherit; font-size: 15px; font-weight: 700; text-decoration: none; cursor: pointer; text-align: left; }
+  .btn small { display: block; font-weight: 500; font-size: 12px; color: var(--muted); margin-top: 2px; }
+  .btn.rec { background: var(--ink); color: #fff; }
+  .btn.rec small { color: #ccc; }
+  .btn:focus-visible { outline: 3px solid #888; outline-offset: 2px; }
+  .tag { font-size: 10px; letter-spacing: .1em; text-transform: uppercase; border: 1px solid currentColor; border-radius: 99px; padding: 3px 8px; white-space: nowrap; }
+  .help { margin-top: 26px; border-top: 1px solid var(--line); padding-top: 18px; font-size: 13px; line-height: 1.55; color: var(--muted); }
+  .help b { color: var(--ink); }
+  .help p { margin: 0 0 10px; }
+  .url { display: block; word-break: break-all; background: var(--soft); border-radius: 8px; padding: 10px 12px; font-size: 11px; color: var(--ink); margin: 6px 0 0; }
+  .lista a { display: flex; justify-content: space-between; align-items: center; padding: 15px 2px; border-bottom: 1px solid var(--line); color: var(--ink); text-decoration: none; font-weight: 700; text-transform: uppercase; letter-spacing: .06em; font-size: 15px; }
+  .lista a span { font-weight: 500; text-transform: none; letter-spacing: 0; color: var(--muted); font-size: 13px; }
+  .lista a.geral { border-bottom: 2px solid var(--ink); }
+  .voltar { display: inline-block; margin-top: 22px; color: var(--ink); font-size: 13px; }
+  .ok { color: var(--muted); font-size: 12px; min-height: 16px; margin: -4px 0 8px; }
+</style>
+</head>
+<body>
+<main>
+  <header>
+    <img src="logo.png" alt="COMBC – Comunidade Batista Cristã">
+    <p>Ministério<br>de Louvor</p>
+  </header>
+  <div id="app"></div>
+</main>
+<script src="agendas.js"></script>
+<script>
+(function () {
+  var app = document.getElementById('app');
+  var A = window.AGENDAS || [];
+  var slug = (new URLSearchParams(location.search).get('b') || '').toLowerCase();
+  var ag = A.filter(function (a) { return a.slug === slug; })[0];
+  var ua = navigator.userAgent || '';
+  var isApple = /iPhone|iPad|iPod|Macintosh/.test(ua);
+  var isAndroid = /Android/.test(ua);
+
+  function esc(s) { return String(s).replace(/[&<>"]/g, function (c) { return { '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;' }[c]; }); }
+
+  if (!ag) {
+    app.innerHTML =
+      '<h1>Escala na sua agenda</h1>' +
+      '<p class="sub">Escolha a agenda. A <b>Geral</b> tem todas as bandas; a da sua banda mostra só as suas datas.</p>' +
+      '<nav class="lista">' + A.map(function (a) {
+        return '<a class="' + (a.slug === 'geral' ? 'geral' : '') + '" href="?b=' + a.slug + '">' + esc(a.nome) +
+          '<span>' + (a.slug === 'geral' ? 'todas as bandas' : 'banda ' + esc(a.nome)) + ' →</span></a>';
+      }).join('') + '</nav>';
+    return;
+  }
+
+  var titulo = ag.slug === 'geral' ? 'Geral' : 'Banda ' + ag.nome;
+  var nomeAgenda = 'Louvor COMBC – ' + ag.nome;
+  var ics = 'https://calendar.google.com/calendar/ical/' + encodeURIComponent(ag.id) + '/public/basic.ics';
+  var webcal = ics.replace(/^https:/, 'webcal:');
+  var google = 'https://calendar.google.com/calendar/u/0?cid=' + ag.b64;
+  var outlook = 'https://outlook.live.com/calendar/0/addfromweb?url=' + encodeURIComponent(ics) + '&name=' + encodeURIComponent(nomeAgenda);
+
+  function btn(href, label, nota, rec) {
+    return '<a class="btn' + (rec ? ' rec' : '') + '" href="' + href + '"><span>' + label + '<small>' + nota + '</small></span>' +
+      (rec ? '<span class="tag">seu aparelho</span>' : '<span aria-hidden="true">→</span>') + '</a>';
+  }
+
+  app.innerHTML =
+    '<h1>' + esc(titulo) + '</h1>' +
+    '<p class="sub">' + (ag.slug === 'geral' ? 'Todas as bandas da escala.' : 'Só as datas da banda ' + esc(ag.nome) + '.') +
+    ' Toque na opção do seu aparelho.</p>' +
+    btn(webcal, 'iPhone, iPad ou Mac', 'Abre o app Calendário → Assinar', isApple) +
+    btn(google, 'Android / Google Agenda', 'Abre o Google Agenda → Adicionar', isAndroid) +
+    btn(outlook, 'Outlook', 'Outlook.com ou app Outlook', false) +
+    '<button class="btn" id="copiar" type="button"><span>Copiar link da agenda<small>Para qualquer outro app de calendário</small></span><span aria-hidden="true">⧉</span></button>' +
+    '<div class="ok" id="ok" role="status"></div>' +
+    '<div class="help">' +
+      '<p><b>Não precisa de conta Google.</b> No iPhone e no Outlook a agenda funciona com a conta que você já usa.</p>' +
+      '<p><b>Android:</b> se o Google Agenda abrir sem a opção de adicionar, abra este link no navegador (Chrome), entre na sua conta Google e toque em Adicionar.</p>' +
+      '<p><b>Outro app:</b> procure "assinar calendário", "adicionar por URL" ou "calendário da internet" e cole o link:</p>' +
+      '<code class="url">' + esc(ics) + '</code>' +
+    '</div>' +
+    '<a class="voltar" href="./">← ver todas as agendas</a>';
+
+  document.getElementById('copiar').addEventListener('click', function () {
+    var ok = document.getElementById('ok');
+    function feito() { ok.textContent = 'Link copiado.'; }
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(ics).then(feito, function () { ok.textContent = 'Não deu para copiar; use o link abaixo.'; });
+    } else { ok.textContent = 'Copie o link abaixo.'; }
+  });
+  document.title = titulo + ' · Escala de Louvor · COMBC';
+})();
+</script>
+</body>
+</html>
