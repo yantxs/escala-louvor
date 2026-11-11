@@ -61,7 +61,7 @@ window.AGENDAS = [
  },
  {
   "slug": "rafaela",
-  "nome": "Rafaela",
+  "nome": "Pr. Pedro",
   "id": "276787d062dbe5a6257190b6eed574fbc23044ca485647577281a08b8f93e2b9@group.calendar.google.com",
   "b64": "Mjc2Nzg3ZDA2MmRiZTVhNjI1NzE5MGI2ZWVkNTc0ZmJjMjMwNDRjYTQ4NTY0NzU3NzI4MWEwOGI4ZjkzZTJiOUBncm91cC5jYWxlbmRhci5nb29nbGUuY29t"
  },
